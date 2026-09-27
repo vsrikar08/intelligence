@@ -25,3 +25,11 @@ test('reports backend setup errors and unavailable backend safely', async () => 
   assert.equal(unavailable.status, 503);
   assert.ok(!(await unavailable.text()).includes('private provider details'));
 });
+test('Ask uses the same local proxy and preserves answer and cited memories', async () => {
+  const payload = { answer: 'Alex handles security.', memories: [{ id: '1', memory: 'Alex handles security.' }], insufficient: false, message: 'Based on your saved notes.' };
+  const response = await handleMemory(request('Who handles security?'), 'ask', (async (url) => {
+    assert.equal(url, 'http://127.0.0.1:8000/api/ask');
+    return Response.json(payload);
+  }) as typeof fetch);
+  assert.deepEqual(await response.json(), payload);
+});

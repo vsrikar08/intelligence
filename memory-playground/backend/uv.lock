@@ -564,6 +564,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "fastapi" },
+    { name = "httpx" },
     { name = "mem0ai" },
     { name = "ollama" },
     { name = "python-dotenv" },
@@ -579,6 +580,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "fastapi", specifier = ">=0.115,<1" },
+    { name = "httpx", specifier = ">=0.28,<1" },
     { name = "mem0ai", specifier = ">=1.0,<2" },
     { name = "ollama", specifier = ">=0.6,<1" },
     { name = "python-dotenv", specifier = ">=1,<2" },

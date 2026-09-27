@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from config import SetupRequired
+from answers import answer_question
 from service import MemoryService
 
 
@@ -23,7 +24,7 @@ class MemoryInput(BaseModel):
         return value.strip()
 
 
-def create_app(service=None):
+def create_app(service=None, answerer=answer_question):
     service = service or MemoryService()
 
     @asynccontextmanager
@@ -62,8 +63,12 @@ def create_app(service=None):
         return {'status': 'ok', 'storage': 'local'}
 
     @app.post('/api/{action}')
-    def memory_action(action: Literal['remember', 'recall'], body: MemoryInput):
+    def memory_action(action: Literal['remember', 'recall', 'ask'], body: MemoryInput):
         try:
+            if action == 'ask':
+                memories = service.execute('recall', body.text)
+                result = answerer(body.text, memories)
+                return {**result, 'message': 'The saved notes leave some gaps.' if result['insufficient'] else 'Based on your saved notes.'}
             memories = service.execute(action, body.text)
             message = ('Memory saved on this computer. It’ll be here when you come back.' if action == 'remember'
                        else 'Here’s what came to mind.' if memories
@@ -73,6 +78,8 @@ def create_app(service=None):
             return JSONResponse({'error': str(error)}, status_code=503)
         except Exception:
             # Provider exceptions can include credentials, URLs or user text.
+            if action == 'ask':
+                return JSONResponse({'error': 'Could not produce an answer with valid memory references. Check the answer model settings or try again. Your memories are unchanged.'}, status_code=502)
             return JSONResponse({'error': 'Memory could not finish this request. Check your model settings, credentials or local model service. Try Recall before saving again.'}, status_code=502)
 
     return app

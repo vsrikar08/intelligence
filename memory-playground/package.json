@@ -14,7 +14,8 @@
     "test": "node --experimental-strip-types --test tests/*.test.ts",
     "setup": "uv run --locked --project backend python backend/setup_models.py",
     "test:backend": "uv run --locked --project backend pytest tests/backend -q",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "setup:ask": "uv run --locked --project backend python backend/setup_ask.py"
   },
   "dependencies": {
     "react": "19.2.6",

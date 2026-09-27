@@ -1,5 +1,5 @@
 // Server-only proxy to the local Python Mem0 OSS process. No hosted Mem0 API.
-export async function handleMemory(request: Request, action: 'remember' | 'recall', upstream: typeof fetch = fetch): Promise<Response> {
+export async function handleMemory(request: Request, action: 'remember' | 'recall' | 'ask', upstream: typeof fetch = fetch): Promise<Response> {
   const json = (body: unknown, status = 200) => Response.json(body, { status, headers: { 'Cache-Control': 'no-store' } });
   try {
     const origin = request.headers.get('origin');

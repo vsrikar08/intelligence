@@ -42,6 +42,8 @@ The rest of this document is meant to help you navigate the codebase and make ch
 
 ## Where to look
 
+- `rowboat/UPSTREAM.md` — vendored Rowboat revision, license and local changes. Its workspaces build independently; follow `docs/DEVELOPMENT.md` for local intelligence.
+
 One line each; only the things you would not find by reading the tree.
 
 - `docs/product.md` — the product's shape: patches, tiers, companies, identity, integrations. Read it before designing anything user-facing.

@@ -1,5 +1,17 @@
 # Patchy Cloud
 
+## Local intelligence experiment
+
+This repository includes our modified, self-hosted Rowboat source in `rowboat/`.
+It runs alongside Patchy Cloud, with the existing Rowboat interface in a browser
+and ChatGPT OAuth for model access. The first connector reads patch metadata and
+updates only a dedicated demo patch’s description, with tool permissions.
+
+Follow [Local intelligence](docs/DEVELOPMENT.md#local-intelligence) for the initial
+build, then use `pnpm dev:intelligence` and `pnpm dev:intelligence:web`. Local
+credentials, chat history and runtime data stay in ignored `.local/intelligence/`.
+See [Rowboat provenance](rowboat/UPSTREAM.md) for the upstream version and license.
+
 A cloud for a company's internal tools, built for the agentic era.
 
 People at a company build **patches** — anything from a static page to a full CRM — and deploy them here. Anyone can build one: a person who codes, or a person whose agent codes for them. Agents are good at CLIs and at running code locally, so the CLI is the front door: tell your agent to publish, and the patch is up. Log in once and reach everything in your company you have access to.
@@ -63,6 +75,8 @@ Run `pnpm patchy dev` to exercise it locally over PGlite and invented fixtures, 
 
 A Turborepo monorepo managed with pnpm. [AGENTS.md](AGENTS.md) is the guide to working in it, for people and agents alike.
 
+- `rowboat/` — modified Rowboat source; independent pnpm workspaces for the local intelligence backend and existing interface.
+- `scripts/intelligence/` — optional backend lifecycle and browser interface launchers.
 - `apps/server` — the Effect HTTP server: wires the capability packages into one layer, guards `/api/*`, and listens (`@patchy/server`).
 - `packages/patchy`: `patchy`, one package for the CLI, config builders, browser client and local dev runtime; initializes patch repos, refreshes managed files, edits declarations, discovers company tools and data sources, and manages owned patches.
 - `packages/sdk` — current release and immutable tarball distribution, authenticated generation, and canonical project skills under `skills/` (`@patchy/sdk`).

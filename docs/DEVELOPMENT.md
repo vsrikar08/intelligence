@@ -1,5 +1,77 @@
 # Patchy Cloud Development
 
+## Local intelligence
+
+`pnpm dev:intelligence` runs our local Rowboat checkout as an optional backend
+alongside this worktree's Patchy dev server. This is the first integration step:
+an authenticated local API and a Patchy MCP connection. The optional browser
+adapter serves the fork's existing React interface for conversation testing.
+
+The source checkout defaults to `rowboat/`; set `ROWBOAT_SOURCE_DIR` to use
+another location. It must contain our local integration changes, including
+`demo/start.mjs` and the `ROWBOAT_LOCAL_ONLY` service profile. Build it once:
+
+```sh
+cd rowboat/apps/harbor
+pnpm install --frozen-lockfile
+pnpm -r build
+cd ../x
+pnpm install --frozen-lockfile
+npm run shared
+npm run core
+npm run server
+npm run client
+cd ../../..
+pnpm dev:intelligence
+```
+
+Startup ensures the regular Patchy dev instance is running, prepares a dedicated
+`rowboat-demo` patch, and starts Rowboat on a loopback port. It returns while the
+service keeps running. Use the printed API URL; ports can change on restart.
+
+```sh
+pnpm dev:intelligence status
+pnpm dev:intelligence rpc mcp:listTools '{"serverName":"patchy"}'
+pnpm dev:intelligence stop
+```
+
+Start the existing interface with `pnpm dev:intelligence:web` and open
+`http://127.0.0.1:5174/`. This runs in the foreground; Ctrl+C stops only the web
+server. Start the backend first, and restart the web server after restarting
+the backend. `ROWBOAT_WEB_PORT` overrides the interface port.
+The adapter forwards RPC and live events to the backend and keeps the bearer
+key server-side. It accepts only local same-origin browser traffic. Native
+window and operating-system features are outside this browser adapter's scope.
+Use **Sign in with ChatGPT** in onboarding to connect an existing ChatGPT
+subscription. The browser adapter reserves a login window on the button click,
+then the backend sends OpenAI's authorization URL over the live connection.
+Complete login in that window; the backend handles the local OAuth callback
+and stores the tokens encrypted in this instance's work directory. Allow
+pop-ups for the local interface if prompted. No API key is required for this
+connection. Keep permissions in manual mode when testing tools.
+
+State, settings, sessions and memory live in `.local/intelligence/`. The log is
+`rowboat.log` there. Stop preserves that directory and leaves Patchy running.
+The local RPC helper reads the private bearer key without printing it.
+The local-only profile skips hosted connector services and model metadata
+refreshes; model inference still requires a separately configured provider.
+No provider is supplied automatically.
+
+The connector uses Patchy's existing CLI authentication with isolated CLI state
+under `.local/intelligence/patchy-cli`. It reads patch metadata and resource
+definitions, and only writes the dedicated demo patch's description. It does
+not expose table rows, page contents or source updates. The usual initial
+identity is the seeded **Patchy Dev** user, not an employee login.
+
+To verify actual connector reads and a description update (restored afterward):
+
+```sh
+ROWBOAT_WORKDIR="$PWD/.local/intelligence" node rowboat/apps/x/packages/core/scripts/patchy-mcp.smoke.mjs
+```
+
+Rebuild Rowboat's changed packages and stop/start this service after source edits.
+This local experiment does not change the production Patchy runtime.
+
 ## T3 Code
 
 The root `t3.json` defaults new threads to isolated worktrees and offers five

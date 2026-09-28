@@ -7,6 +7,12 @@ metadata:
 
 # The dev loop
 
+For the optional local intelligence backend, follow
+[Local intelligence](../../../docs/DEVELOPMENT.md#local-intelligence).
+`pnpm dev:intelligence` starts our local Rowboat service and its Patchy MCP
+connection; `status` and `stop` manage it separately from the Patchy instance.
+Its data remains in `.local/intelligence/` between runs.
+
 `pnpm dev` runs one complete Patchy Cloud per git worktree: embedded Postgres,
 migrations, a seeded **Patchy Dev** company and **Dev Machine** publishing key,
 the packed `patchy` release, then the server. Every command below is scoped to its worktree.

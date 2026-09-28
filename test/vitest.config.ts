@@ -7,7 +7,7 @@ export default defineConfig({
   },
   test: {
     // Multi-session SDK invariants have their own mandatory real-Postgres job.
-    exclude: [...configDefaults.exclude, "**/*.postgres.test.ts"],
+    exclude: [...configDefaults.exclude, "**/*.postgres.test.ts", "rowboat/**"],
     setupFiles: [fileURLToPath(new URL("./setup.ts", import.meta.url))],
     globalSetup: fileURLToPath(new URL("./postgres.ts", import.meta.url))
   }

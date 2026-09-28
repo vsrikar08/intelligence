@@ -12,6 +12,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "node --import tsx --conditions=development scripts/dev/src/main.ts",
+    "dev:intelligence": "node scripts/intelligence/main.mjs",
+    "dev:intelligence:web": "node scripts/intelligence/web.mjs",
     "patchy": "node --import tsx --conditions=development packages/patchy/src/index.ts",
     "seed:dev": "node scripts/seed-dev.mjs",
     "test": "vitest run",

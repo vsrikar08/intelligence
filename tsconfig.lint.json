@@ -17,5 +17,5 @@
     }
   },
   "include": ["**/*.ts", "**/*.mts", "**/*.cts", "**/*.tsx"],
-  "exclude": ["**/dist/**", "**/node_modules/**", ".claude/**"]
+  "exclude": ["**/dist/**", "**/node_modules/**", ".claude/**", "rowboat/**"]
 }

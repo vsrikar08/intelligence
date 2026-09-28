@@ -13,7 +13,8 @@ export default tseslint.config(
       "**/node_modules/**",
       "**/.turbo/**",
       ".claude/**",
-      ".local/**"
+      ".local/**",
+      "rowboat/**"
     ]
   },
   {
